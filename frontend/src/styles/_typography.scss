@@ -1,0 +1,7 @@
+@use './tokens';
+
+// FONTES - 4 fontes
+
+* {
+  font-family: tokens.$font-family-sans-serif;
+}

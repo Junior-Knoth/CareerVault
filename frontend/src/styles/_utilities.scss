@@ -1,0 +1,5 @@
+@use './tokens';
+
+.text-secondary {
+  color: tokens.$color-text-secondary;
+}

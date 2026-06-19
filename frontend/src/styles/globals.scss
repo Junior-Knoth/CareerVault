@@ -1,0 +1,9 @@
+@use './tokens';
+@use './reset';
+@use './mixins';
+@use './typography';
+@use './utilities';
+
+body {
+  background-color: tokens.$color-background;
+}
