@@ -29,6 +29,12 @@ export const navigationSections: NavigationSection[] = [
         description: 'Crie e gerencie universos independentes de carreira.',
       },
       {
+        id: 'teams',
+        label: 'Equipes',
+        path: '/equipes',
+        description: 'Cadastre clubes e selecoes dentro de cada save.',
+      },
+      {
         id: 'seasons',
         label: 'Temporadas',
         path: '/temporadas',

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Badge, EmptyState, LoadingState, PageHeader, Panel } from '../components/ui';
+import { useActiveCareer } from '../context';
 import { getHealth } from '../services/api';
 import './Page.scss';
 
 export default function DashboardPage() {
+  const { activeSave, activeTeam } = useActiveCareer();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
   useEffect(() => {
@@ -49,6 +51,24 @@ export default function DashboardPage() {
           <EmptyState
             message="API indisponivel"
             description="Inicie o backend FastAPI para ativar a verificacao de saude local."
+          />
+        )}
+      </Panel>
+
+      <Panel title="Contexto ativo">
+        {activeSave ? (
+          <EmptyState
+            message={activeSave.name}
+            description={
+              activeTeam
+                ? `Equipe ativa: ${activeTeam.name}`
+                : 'Nenhuma equipe ativa selecionada para este save.'
+            }
+          />
+        ) : (
+          <EmptyState
+            message="Nenhum save ativo"
+            description="Crie ou selecione um save para carregar equipes e futuros dados de carreira."
           />
         )}
       </Panel>

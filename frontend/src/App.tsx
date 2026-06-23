@@ -5,15 +5,19 @@ import DashboardPage from './pages/DashboardPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import SavesPage from './pages/SavesPage';
+import TeamsPage from './pages/TeamsPage';
 
 function App() {
-  const placeholderItems = navigationItems.filter((item) => !['/', '/saves'].includes(item.path));
+  const placeholderItems = navigationItems.filter(
+    (item) => !['/', '/saves', '/equipes'].includes(item.path),
+  );
 
   return (
     <AppShell>
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/saves" element={<SavesPage />} />
+        <Route path="/equipes" element={<TeamsPage />} />
         {placeholderItems.map((item) => (
           <Route key={item.id} path={item.path} element={<PlaceholderPage item={item} />} />
         ))}

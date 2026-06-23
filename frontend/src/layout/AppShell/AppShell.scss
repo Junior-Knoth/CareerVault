@@ -135,18 +135,49 @@
 
 .appContextBar {
   align-items: center;
-  color: tokens.$color-text-muted;
   display: flex;
   flex-wrap: wrap;
   gap: tokens.$space-2;
   justify-content: flex-end;
   margin-left: auto;
+}
+
+.appContextField {
+  align-items: center;
+  display: flex;
+  gap: tokens.$space-2;
 
   span {
-    border: tokens.$border-width-default solid tokens.$color-border;
-    color: tokens.$color-text-secondary;
+    color: tokens.$color-text-muted;
     font-size: tokens.$font-size-small;
+    font-weight: tokens.$font-weight-bold;
+  }
+
+  .select {
+    min-height: 2rem;
+    min-width: 11rem;
     padding: tokens.$space-1 tokens.$space-2;
+  }
+}
+
+.appContextStatic {
+  align-items: center;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-secondary;
+  display: inline-flex;
+  gap: tokens.$space-2;
+  min-height: 2rem;
+  padding: tokens.$space-1 tokens.$space-2;
+
+  span {
+    color: tokens.$color-text-muted;
+    font-size: tokens.$font-size-small;
+    font-weight: tokens.$font-weight-bold;
+  }
+
+  strong {
+    font-size: tokens.$font-size-small;
+    font-weight: tokens.$font-weight-regular;
   }
 }
 
@@ -206,7 +237,12 @@
   }
 
   .appContextBar {
+    flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: tokens.$space-1;
+  }
+
+  .appContextField {
+    flex: 0 0 auto;
   }
 }

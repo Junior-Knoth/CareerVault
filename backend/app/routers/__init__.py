@@ -1,3 +1,3 @@
-from app.routers import saves
+from app.routers import saves, teams
 
-__all__ = ["saves"]
+__all__ = ["saves", "teams"]

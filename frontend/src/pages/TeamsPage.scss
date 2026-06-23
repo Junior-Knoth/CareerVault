@@ -1,0 +1,116 @@
+@use 'styles/tokens';
+
+.teamSaveSelector,
+.teamForm {
+  display: grid;
+  gap: tokens.$space-4;
+}
+
+.teamSaveSelector {
+  align-items: end;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.teamFormGrid {
+  display: grid;
+  gap: tokens.$space-4;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.teamFormActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  justify-content: flex-end;
+}
+
+.teamError {
+  color: tokens.$color-error;
+  font-size: tokens.$font-size-small;
+}
+
+.teamList {
+  display: grid;
+  gap: tokens.$space-3;
+}
+
+.teamItem {
+  align-items: stretch;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  display: grid;
+  gap: tokens.$space-4;
+  grid-template-columns: 0.5rem minmax(0, 1fr) auto;
+  min-height: 6rem;
+}
+
+.teamItemColor {
+  min-height: 100%;
+}
+
+.teamItemContent {
+  display: grid;
+  gap: tokens.$space-2;
+  padding: tokens.$space-4 0;
+
+  p {
+    color: tokens.$color-text-secondary;
+    line-height: tokens.$line-height-normal;
+  }
+}
+
+.teamCountry {
+  align-items: center;
+  color: tokens.$color-text-secondary;
+  display: inline-flex;
+  gap: tokens.$space-2;
+  line-height: tokens.$line-height-normal;
+
+  img {
+    border: tokens.$border-width-default solid tokens.$color-border;
+    display: block;
+    height: 1rem;
+    object-fit: cover;
+    width: 1.5rem;
+  }
+}
+
+.teamItemHeader {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+
+  h2 {
+    font-size: tokens.$font-size-medium;
+    line-height: tokens.$line-height-tight;
+  }
+}
+
+.teamItemActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  justify-content: flex-end;
+  padding: tokens.$space-4;
+}
+
+@media (max-width: tokens.$breakpoint-medium) {
+  .teamSaveSelector,
+  .teamFormGrid,
+  .teamItem {
+    grid-template-columns: 1fr;
+  }
+
+  .teamItemColor {
+    min-height: 0.5rem;
+  }
+
+  .teamItemContent {
+    padding: 0 tokens.$space-4;
+  }
+
+  .teamItemActions {
+    justify-content: flex-start;
+  }
+}

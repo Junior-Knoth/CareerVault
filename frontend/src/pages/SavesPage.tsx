@@ -12,6 +12,7 @@ import {
   Textarea,
   useToast,
 } from '../components/ui';
+import { useActiveCareer } from '../context';
 import { createSave, deleteSave, listSaves, updateSave } from '../services/savesApi';
 import type { Save, SavePayload } from '../types/save';
 import './Page.scss';
@@ -55,6 +56,7 @@ function toForm(save: Save): SaveFormState {
 
 export default function SavesPage() {
   const { addToast } = useToast();
+  const { refreshSaves, setActiveSaveId } = useActiveCareer();
   const [saves, setSaves] = useState<Save[]>([]);
   const [form, setForm] = useState<SaveFormState>(emptyForm);
   const [editingSaveId, setEditingSaveId] = useState<number | null>(null);
@@ -121,9 +123,11 @@ export default function SavesPage() {
       } else {
         const createdSave = await createSave(toPayload(form));
         setSaves((currentSaves) => [createdSave, ...currentSaves]);
+        setActiveSaveId(String(createdSave.id));
         addToast({ variant: 'success', title: 'Save criado', message: createdSave.name });
       }
 
+      await refreshSaves();
       resetForm();
     } catch {
       setError('Nao foi possivel salvar os dados.');
@@ -146,6 +150,7 @@ export default function SavesPage() {
     try {
       await deleteSave(saveToDelete.id);
       setSaves((currentSaves) => currentSaves.filter((save) => save.id !== saveToDelete.id));
+      await refreshSaves();
       addToast({ variant: 'success', title: 'Save excluido', message: saveToDelete.name });
     } catch {
       addToast({

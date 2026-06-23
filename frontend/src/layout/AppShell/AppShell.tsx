@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './AppShell.scss';
+import Select from '../../components/ui/Select/Select';
 import { navigationSections } from '../../constants/navigation';
+import { useActiveCareer } from '../../context';
 import { classNames } from '../../utils/classNames';
 
 interface AppShellProps {
@@ -10,6 +12,18 @@ interface AppShellProps {
 
 export default function AppShell({ children }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const {
+    saves,
+    teams,
+    activeSaveId,
+    activeTeamId,
+    isLoading,
+    setActiveSaveId,
+    setActiveTeamId,
+  } = useActiveCareer();
+
+  const saveOptions = saves.map((save) => ({ value: String(save.id), label: save.name }));
+  const teamOptions = teams.map((team) => ({ value: String(team.id), label: team.name }));
 
   function handleNavigate() {
     setIsSidebarOpen(false);
@@ -72,9 +86,34 @@ export default function AppShell({ children }: AppShellProps) {
           </button>
 
           <div className="appContextBar" aria-label="Contexto ativo">
-            <span>Save: nenhum</span>
-            <span>Equipe: nenhuma</span>
-            <span>Temporada: nenhuma</span>
+            <label className="appContextField" htmlFor="active-save">
+              <span>Save</span>
+              <Select
+                id="active-save"
+                value={activeSaveId}
+                onChange={setActiveSaveId}
+                options={saveOptions}
+                placeholder="Nenhum save"
+                disabled={isLoading || saves.length === 0}
+              />
+            </label>
+
+            <label className="appContextField" htmlFor="active-team">
+              <span>Equipe</span>
+              <Select
+                id="active-team"
+                value={activeTeamId}
+                onChange={setActiveTeamId}
+                options={teamOptions}
+                placeholder="Nenhuma equipe"
+                disabled={isLoading || !activeSaveId || teams.length === 0}
+              />
+            </label>
+
+            <div className="appContextStatic">
+              <span>Temporada</span>
+              <strong>Nenhuma</strong>
+            </div>
           </div>
         </header>
 

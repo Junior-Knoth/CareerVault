@@ -4,12 +4,15 @@ import { BrowserRouter } from 'react-router-dom';
 import './styles/globals.scss';
 import App from './App.tsx';
 import { ToastProvider } from './components/ui';
+import { ActiveCareerProvider } from './context';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <ToastProvider>
-        <App />
+        <ActiveCareerProvider>
+          <App />
+        </ActiveCareerProvider>
       </ToastProvider>
     </BrowserRouter>
   </StrictMode>,
