@@ -1,20 +1,31 @@
 import type { HealthResponse } from '../types/health';
 
-// Obtém ViTE_API_URL do .env.local que está na pasta anterior
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 if (!API_URL) {
   throw new Error('VITE_API_URL is not defined in the environment variables');
 }
 
-export async function getHealth() {
-  const response = await fetch(`${API_URL}/health`);
+export async function requestJson<TData>(path: string, init?: RequestInit): Promise<TData> {
+  const response = await fetch(`${API_URL}${path}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...init?.headers,
+    },
+    ...init,
+  });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch health status: ${response.statusText}`);
+    throw new Error(`API request failed: ${response.status} ${response.statusText}`);
   }
 
-  const data: HealthResponse = await response.json();
+  if (response.status === 204) {
+    return undefined as TData;
+  }
 
-  return data;
+  return response.json() as Promise<TData>;
+}
+
+export function getHealth() {
+  return requestJson<HealthResponse>('/health');
 }

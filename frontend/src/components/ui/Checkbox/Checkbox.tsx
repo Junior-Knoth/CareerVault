@@ -1,6 +1,9 @@
 import './Checkbox.scss';
 
-type CheckboxProps = React.ComponentPropsWithoutRef<'input'> & {
+type CheckboxProps = Omit<
+  React.ComponentPropsWithoutRef<'input'>,
+  'checked' | 'onChange' | 'type'
+> & {
   id: string;
   checked: boolean;
   onChange: (checked: boolean) => void;

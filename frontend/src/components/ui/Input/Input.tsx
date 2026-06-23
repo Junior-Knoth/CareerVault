@@ -1,7 +1,7 @@
 import './Input.scss';
 import { classNames } from '../../../utils/classNames';
 
-type InputProps = React.ComponentPropsWithoutRef<'input'> & {
+type InputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange' | 'value'> & {
   id: string;
   value: string;
   onChange: (value: string) => void;

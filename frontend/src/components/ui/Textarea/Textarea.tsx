@@ -1,7 +1,7 @@
 import './Textarea.scss';
 import { classNames } from '../../../utils/classNames';
 
-type TextareaProps = React.ComponentPropsWithoutRef<'textarea'> & {
+type TextareaProps = Omit<React.ComponentPropsWithoutRef<'textarea'>, 'onChange' | 'value'> & {
   id: string;
   value: string;
   onChange: (value: string) => void;

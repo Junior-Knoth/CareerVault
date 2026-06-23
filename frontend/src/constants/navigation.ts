@@ -23,6 +23,12 @@ export const navigationSections: NavigationSection[] = [
         description: 'Visao inicial do save ativo, status da API e atalhos principais.',
       },
       {
+        id: 'saves',
+        label: 'Saves',
+        path: '/saves',
+        description: 'Crie e gerencie universos independentes de carreira.',
+      },
+      {
         id: 'seasons',
         label: 'Temporadas',
         path: '/temporadas',

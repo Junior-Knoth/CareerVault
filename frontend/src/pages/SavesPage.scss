@@ -1,0 +1,91 @@
+@use 'styles/tokens';
+
+.saveForm {
+  display: grid;
+  gap: tokens.$space-4;
+}
+
+.saveFormColors {
+  display: grid;
+  gap: tokens.$space-4;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.saveFormActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  justify-content: flex-end;
+}
+
+.saveError {
+  color: tokens.$color-error;
+  font-size: tokens.$font-size-small;
+}
+
+.saveList {
+  display: grid;
+  gap: tokens.$space-3;
+}
+
+.saveItem {
+  align-items: stretch;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  display: grid;
+  gap: tokens.$space-4;
+  grid-template-columns: 0.5rem minmax(0, 1fr) auto;
+  min-height: 6rem;
+}
+
+.saveItemColor {
+  min-height: 100%;
+}
+
+.saveItemContent {
+  display: grid;
+  gap: tokens.$space-1;
+  padding: tokens.$space-4 0;
+
+  h2 {
+    font-size: tokens.$font-size-medium;
+    line-height: tokens.$line-height-tight;
+  }
+
+  p {
+    color: tokens.$color-text-secondary;
+    line-height: tokens.$line-height-normal;
+  }
+
+  span {
+    color: tokens.$color-text-muted;
+    font-size: tokens.$font-size-small;
+  }
+}
+
+.saveItemActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  justify-content: flex-end;
+  padding: tokens.$space-4;
+}
+
+@media (max-width: tokens.$breakpoint-medium) {
+  .saveFormColors,
+  .saveItem {
+    grid-template-columns: 1fr;
+  }
+
+  .saveItemColor {
+    min-height: 0.5rem;
+  }
+
+  .saveItemContent {
+    padding: 0 tokens.$space-4;
+  }
+
+  .saveItemActions {
+    justify-content: flex-start;
+  }
+}

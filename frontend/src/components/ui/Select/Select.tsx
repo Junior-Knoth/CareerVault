@@ -1,7 +1,7 @@
 import './Select.scss';
 import { classNames } from '../../../utils/classNames';
 
-type SelectProps = React.ComponentPropsWithoutRef<'select'> & {
+type SelectProps = Omit<React.ComponentPropsWithoutRef<'select'>, 'onChange' | 'value'> & {
   id: string;
   value: string;
   onChange: (value: string) => void;

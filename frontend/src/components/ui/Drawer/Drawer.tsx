@@ -47,7 +47,12 @@ export default function Drawer({ isOpen, onClose, title, children, width = '400p
       >
         <div className="drawerHeader">
           <h2 id="drawer-title">{title}</h2>
-          <button className="drawerClose" type="button" onClick={onClose} aria-label="Fechar painel">
+          <button
+            className="drawerClose"
+            type="button"
+            onClick={onClose}
+            aria-label="Fechar painel"
+          >
             x
           </button>
         </div>

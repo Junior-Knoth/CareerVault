@@ -3,6 +3,7 @@ from logging.config import fileConfig
 from alembic import context
 
 from app.database import DATABASE_URL, Base, ensure_database_directory
+from app import models  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", DATABASE_URL)

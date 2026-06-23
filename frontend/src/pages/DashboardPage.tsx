@@ -27,7 +27,9 @@ export default function DashboardPage() {
         title="CareerVault"
         subtitle="Base local para preservar saves, temporadas, elencos e estatisticas de carreira."
         actions={
-          <Badge variant={status === 'success' ? 'success' : status === 'error' ? 'danger' : 'info'}>
+          <Badge
+            variant={status === 'success' ? 'success' : status === 'error' ? 'danger' : 'info'}
+          >
             API {status === 'success' ? 'online' : status === 'error' ? 'offline' : 'checando'}
           </Badge>
         }
