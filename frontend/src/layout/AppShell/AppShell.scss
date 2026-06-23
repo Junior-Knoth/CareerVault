@@ -1,0 +1,207 @@
+@use 'styles/tokens';
+@use 'styles/mixins';
+
+.appShell {
+  background-color: tokens.$color-background;
+  color: tokens.$color-text-primary;
+  display: grid;
+  grid-template-columns: tokens.$layout-sidebar-width-expanded minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.appSidebar {
+  background-color: tokens.$color-panel;
+  border-right: tokens.$border-width-default solid tokens.$color-border;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.appSidebarBrand {
+  align-items: center;
+  border-bottom: tokens.$border-width-default solid tokens.$color-border;
+  display: flex;
+  gap: tokens.$space-3;
+  min-height: tokens.$layout-header-height;
+  padding: tokens.$space-4;
+
+  div {
+    display: grid;
+    gap: tokens.$space-1;
+  }
+
+  strong {
+    line-height: tokens.$line-height-tight;
+  }
+
+  span {
+    color: tokens.$color-text-muted;
+    font-size: tokens.$font-size-small;
+  }
+}
+
+.appSidebarMark {
+  align-items: center;
+  border: tokens.$border-width-default solid tokens.$color-text-primary;
+  color: tokens.$color-text-primary;
+  display: inline-flex;
+  font-size: tokens.$font-size-small;
+  font-weight: tokens.$font-weight-bold;
+  height: 2.25rem;
+  justify-content: center;
+  width: 2.25rem;
+}
+
+.appSidebarNav {
+  display: grid;
+  gap: tokens.$space-4;
+  overflow-y: auto;
+  padding: tokens.$space-4;
+}
+
+.appSidebarSection {
+  display: grid;
+  gap: tokens.$space-2;
+
+  h2 {
+    color: tokens.$color-text-muted;
+    font-size: tokens.$font-size-small;
+    line-height: tokens.$line-height-tight;
+    text-transform: uppercase;
+  }
+
+  ul {
+    display: grid;
+    gap: tokens.$space-1;
+    list-style: none;
+  }
+}
+
+.appSidebarLink {
+  border: tokens.$border-width-default solid transparent;
+  color: tokens.$color-text-secondary;
+  display: block;
+  padding: tokens.$space-2 tokens.$space-3;
+  text-decoration: none;
+
+  &:focus-visible {
+    @include mixins.focus-outline;
+  }
+}
+
+.appSidebarLink--active,
+.appSidebarLink:hover {
+  background-color: tokens.$color-surface;
+  border-color: tokens.$color-border;
+  color: tokens.$color-text-primary;
+}
+
+.appShellMain {
+  display: grid;
+  grid-template-rows: tokens.$layout-header-height minmax(0, 1fr);
+  min-width: 0;
+}
+
+.appTopbar {
+  align-items: center;
+  background-color: tokens.$color-background;
+  border-bottom: tokens.$border-width-default solid tokens.$color-border;
+  display: flex;
+  gap: tokens.$space-4;
+  justify-content: space-between;
+  padding: 0 tokens.$space-6;
+}
+
+.appMenuButton {
+  background-color: transparent;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-primary;
+  cursor: pointer;
+  display: none;
+  font: inherit;
+  font-weight: tokens.$font-weight-bold;
+  min-height: 2.25rem;
+  padding: tokens.$space-2 tokens.$space-3;
+
+  &:focus-visible {
+    @include mixins.focus-outline;
+  }
+}
+
+.appContextBar {
+  align-items: center;
+  color: tokens.$color-text-muted;
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  justify-content: flex-end;
+  margin-left: auto;
+
+  span {
+    border: tokens.$border-width-default solid tokens.$color-border;
+    color: tokens.$color-text-secondary;
+    font-size: tokens.$font-size-small;
+    padding: tokens.$space-1 tokens.$space-2;
+  }
+}
+
+.appShellContent {
+  min-width: 0;
+}
+
+.appShellOverlay {
+  display: none;
+}
+
+@media (max-width: tokens.$breakpoint-medium) {
+  .appShell {
+    display: block;
+  }
+
+  .appSidebar {
+    bottom: 0;
+    left: 0;
+    max-width: min(20rem, 86vw);
+    position: fixed;
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform 160ms ease;
+    width: tokens.$layout-sidebar-width-expanded;
+    z-index: 1000;
+  }
+
+  .appShell--sidebarOpen .appSidebar {
+    transform: translateX(0);
+  }
+
+  .appShellOverlay {
+    background-color: rgba(0, 0, 0, 0.68);
+    border: 0;
+    cursor: pointer;
+    display: none;
+    inset: 0;
+    position: fixed;
+    z-index: 999;
+  }
+
+  .appShell--sidebarOpen .appShellOverlay {
+    display: block;
+  }
+
+  .appShellMain {
+    min-height: 100vh;
+  }
+
+  .appTopbar {
+    padding: 0 tokens.$space-4;
+  }
+
+  .appMenuButton {
+    display: inline-flex;
+  }
+
+  .appContextBar {
+    overflow-x: auto;
+    padding-bottom: tokens.$space-1;
+  }
+}
