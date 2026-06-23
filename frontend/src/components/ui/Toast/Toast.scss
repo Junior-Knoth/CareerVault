@@ -1,0 +1,61 @@
+@use 'styles/tokens';
+@use 'styles/mixins';
+
+.toast {
+  align-items: start;
+  background-color: tokens.$color-panel;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-primary;
+  display: grid;
+  gap: tokens.$space-3;
+  grid-template-columns: 1fr auto;
+  min-width: min(22rem, calc(100vw - #{tokens.$space-8}));
+  padding: tokens.$space-3;
+}
+
+.toast--success {
+  border-color: tokens.$color-success;
+}
+
+.toast--warning {
+  border-color: tokens.$color-warning;
+}
+
+.toast--danger {
+  border-color: tokens.$color-error;
+}
+
+.toast--info {
+  border-color: tokens.$color-info;
+}
+
+.toastContent {
+  display: grid;
+  gap: tokens.$space-1;
+
+  strong {
+    font-size: tokens.$font-size-small;
+    line-height: tokens.$line-height-tight;
+  }
+
+  p {
+    color: tokens.$color-text-secondary;
+    line-height: tokens.$line-height-normal;
+  }
+}
+
+.toastClose {
+  background-color: transparent;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-primary;
+  cursor: pointer;
+  font: inherit;
+  font-weight: tokens.$font-weight-bold;
+  height: 1.75rem;
+  line-height: 1;
+  width: 1.75rem;
+
+  &:focus-visible {
+    @include mixins.focus-outline;
+  }
+}
