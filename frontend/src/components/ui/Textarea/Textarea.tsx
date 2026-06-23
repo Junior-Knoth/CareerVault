@@ -1,4 +1,5 @@
 import './Textarea.scss';
+import { classNames } from '../../../utils/classNames';
 
 type TextareaProps = React.ComponentPropsWithoutRef<'textarea'> & {
   id: string;
@@ -18,6 +19,7 @@ export default function Textarea({
   rows = 3,
   disabled = false,
   error = false,
+  className,
   ...rest
 }: TextareaProps) {
   return (
@@ -30,7 +32,8 @@ export default function Textarea({
       placeholder={placeholder}
       rows={rows}
       disabled={disabled}
-      className={`${error ? 'error' : ''} textarea`}
+      aria-invalid={error ? 'true' : 'false'}
+      className={classNames('textarea', error && 'textarea--error', className)}
     ></textarea>
   );
 }

@@ -1,2 +1,31 @@
+@use 'styles/tokens';
+@use 'styles/mixins';
+
 .input {
+  background-color: tokens.$color-surface;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  border-radius: tokens.$border-radius-default;
+  color: tokens.$color-text-primary;
+  font: inherit;
+  min-height: 2.5rem;
+  padding: tokens.$space-2 tokens.$space-3;
+  width: 100%;
+
+  &::placeholder {
+    color: tokens.$color-text-muted;
+  }
+
+  &:focus-visible {
+    @include mixins.focus-outline;
+  }
+
+  &:disabled {
+    color: tokens.$color-text-disabled;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.input--error {
+  border-color: tokens.$color-error;
 }

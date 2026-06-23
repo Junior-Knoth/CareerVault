@@ -1,0 +1,25 @@
+@use 'styles/tokens';
+
+.emptyState {
+  border: tokens.$border-width-default dashed tokens.$color-border;
+  color: tokens.$color-text-secondary;
+  display: grid;
+  gap: tokens.$space-2;
+  justify-items: start;
+  padding: tokens.$space-6;
+}
+
+.message {
+  color: tokens.$color-text-primary;
+  font-size: tokens.$font-size-medium;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.description {
+  color: tokens.$color-text-muted;
+  line-height: tokens.$line-height-normal;
+}
+
+.action {
+  margin-top: tokens.$space-2;
+}

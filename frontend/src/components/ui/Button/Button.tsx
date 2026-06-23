@@ -1,4 +1,5 @@
 import './Button.scss';
+import { classNames } from '../../../utils/classNames';
 
 type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
   variant?: 'primary' | 'secondary' | 'danger';
@@ -11,11 +12,18 @@ export default function Button({
   variant = 'primary',
   type = 'button',
   disabled = false,
+  className,
   onClick,
   ...rest
 }: ButtonProps) {
   return (
-    <button type={type} className={variant} disabled={disabled} onClick={onClick} {...rest}>
+    <button
+      type={type}
+      className={classNames('button', `button--${variant}`, className)}
+      disabled={disabled}
+      onClick={onClick}
+      {...rest}
+    >
       {children}
     </button>
   );

@@ -1,0 +1,33 @@
+@use 'styles/tokens';
+
+.pageHeader {
+  align-items: end;
+  border-bottom: tokens.$border-width-default solid tokens.$color-border;
+  display: flex;
+  gap: tokens.$space-4;
+  justify-content: space-between;
+  padding-bottom: tokens.$space-4;
+}
+
+.pageHeaderText {
+  display: grid;
+  gap: tokens.$space-2;
+
+  h1 {
+    font-size: tokens.$font-size-title;
+    line-height: tokens.$line-height-tight;
+  }
+
+  p {
+    color: tokens.$color-text-secondary;
+    line-height: tokens.$line-height-normal;
+  }
+}
+
+.pageHeaderActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  justify-content: flex-end;
+}

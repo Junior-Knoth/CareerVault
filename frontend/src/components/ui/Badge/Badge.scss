@@ -1,0 +1,39 @@
+@use 'styles/tokens';
+
+.badge {
+  align-items: center;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  display: inline-flex;
+  font-size: tokens.$font-size-small;
+  font-weight: tokens.$font-weight-bold;
+  letter-spacing: 0;
+  line-height: tokens.$line-height-tight;
+  min-height: 1.5rem;
+  padding: tokens.$space-1 tokens.$space-2;
+  text-transform: uppercase;
+}
+
+.badge--default {
+  background-color: tokens.$color-surface;
+  color: tokens.$color-text-secondary;
+}
+
+.badge--success {
+  border-color: tokens.$color-success;
+  color: tokens.$color-success;
+}
+
+.badge--warning {
+  border-color: tokens.$color-warning;
+  color: tokens.$color-warning;
+}
+
+.badge--danger {
+  border-color: tokens.$color-error;
+  color: tokens.$color-error;
+}
+
+.badge--info {
+  border-color: tokens.$color-info;
+  color: tokens.$color-info;
+}

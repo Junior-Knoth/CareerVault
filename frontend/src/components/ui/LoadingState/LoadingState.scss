@@ -1,0 +1,27 @@
+@use 'styles/tokens';
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  border: 2px solid tokens.$color-border;
+  border-top-color: tokens.$color-accent;
+  border-radius: 999px;
+  height: 1.25rem;
+  animation: spin 1s linear infinite;
+  width: 1.25rem;
+}
+
+.loadingState {
+  align-items: center;
+  color: tokens.$color-text-secondary;
+  display: inline-flex;
+  gap: tokens.$space-3;
+  min-height: 2rem;
+}

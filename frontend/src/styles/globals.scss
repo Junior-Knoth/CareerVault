@@ -6,4 +6,9 @@
 
 body {
   background-color: tokens.$color-background;
+  color: tokens.$color-text-primary;
+}
+
+body.noScroll {
+  overflow: hidden;
 }

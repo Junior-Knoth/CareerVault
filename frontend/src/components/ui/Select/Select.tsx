@@ -1,4 +1,5 @@
 import './Select.scss';
+import { classNames } from '../../../utils/classNames';
 
 type SelectProps = React.ComponentPropsWithoutRef<'select'> & {
   id: string;
@@ -18,6 +19,7 @@ export default function Select({
   placeholder,
   disabled = false,
   error = false,
+  className,
   ...rest
 }: SelectProps) {
   return (
@@ -27,15 +29,12 @@ export default function Select({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
-      className={`select ${error ? 'error' : ''}`}
+      aria-invalid={error ? 'true' : 'false'}
+      className={classNames('select', error && 'select--error', className)}
     >
       <option value="">{placeholder}</option>
       {options.map((option) => (
-        <option
-          key={option.value}
-          value={option.value}
-          className={`select-option ${option.value === value ? 'selected' : ''}`}
-        >
+        <option key={option.value} value={option.value}>
           {option.label}
         </option>
       ))}

@@ -1,0 +1,57 @@
+@use 'styles/tokens';
+@use 'styles/mixins';
+
+.drawerOverlay {
+  background-color: rgba(0, 0, 0, 0.72);
+  display: flex;
+  inset: 0;
+  justify-content: flex-end;
+  position: fixed;
+  z-index: 1000;
+}
+
+.drawer {
+  background-color: tokens.$color-panel;
+  border-left: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-primary;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  min-width: min(100%, 20rem);
+}
+
+.drawerHeader {
+  align-items: center;
+  border-bottom: tokens.$border-width-default solid tokens.$color-border;
+  display: flex;
+  gap: tokens.$space-4;
+  justify-content: space-between;
+  padding: tokens.$space-4;
+
+  h2 {
+    font-size: tokens.$font-size-medium;
+    line-height: tokens.$line-height-tight;
+  }
+}
+
+.drawerClose {
+  background-color: transparent;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-primary;
+  cursor: pointer;
+  font: inherit;
+  font-weight: tokens.$font-weight-bold;
+  height: 2rem;
+  line-height: 1;
+  width: 2rem;
+
+  &:focus-visible {
+    @include mixins.focus-outline;
+  }
+}
+
+.drawerBody {
+  flex: 1;
+  overflow: auto;
+  padding: tokens.$space-4;
+}

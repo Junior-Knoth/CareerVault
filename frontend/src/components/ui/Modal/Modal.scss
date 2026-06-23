@@ -1,0 +1,68 @@
+@use 'styles/tokens';
+@use 'styles/mixins';
+
+.modalOverlay {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.72);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: tokens.$space-4;
+  position: fixed;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: tokens.$color-panel;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-primary;
+  max-height: calc(100vh - #{tokens.$space-8});
+  overflow: auto;
+  width: min(100%, 40rem);
+}
+
+.modal--sm {
+  width: min(100%, 28rem);
+}
+
+.modal--md {
+  width: min(100%, 40rem);
+}
+
+.modal--lg {
+  width: min(100%, 56rem);
+}
+
+.modalHeader {
+  align-items: center;
+  border-bottom: tokens.$border-width-default solid tokens.$color-border;
+  display: flex;
+  gap: tokens.$space-4;
+  justify-content: space-between;
+  padding: tokens.$space-4;
+
+  h2 {
+    font-size: tokens.$font-size-medium;
+    line-height: tokens.$line-height-tight;
+  }
+}
+
+.modalClose {
+  background-color: transparent;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-primary;
+  cursor: pointer;
+  font: inherit;
+  font-weight: tokens.$font-weight-bold;
+  height: 2rem;
+  line-height: 1;
+  width: 2rem;
+
+  &:focus-visible {
+    @include mixins.focus-outline;
+  }
+}
+
+.modalBody {
+  padding: tokens.$space-4;
+}

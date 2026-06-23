@@ -1,2 +1,22 @@
-.form-field {
+@use 'styles/tokens';
+
+.formField {
+  display: grid;
+  gap: tokens.$space-2;
+}
+
+.formField label {
+  color: tokens.$color-text-secondary;
+  font-size: tokens.$font-size-small;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.required {
+  color: tokens.$color-accent;
+  margin-left: tokens.$space-1;
+}
+
+.errorMessage {
+  color: tokens.$color-error;
+  font-size: tokens.$font-size-small;
 }

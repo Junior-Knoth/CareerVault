@@ -1,0 +1,22 @@
+@use 'styles/tokens';
+
+.panel {
+  background-color: tokens.$color-panel;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  border-radius: tokens.$border-radius-default;
+  color: tokens.$color-text-primary;
+}
+
+.panelHeader {
+  border-bottom: tokens.$border-width-default solid tokens.$color-border;
+  padding: tokens.$space-4;
+
+  h2 {
+    font-size: tokens.$font-size-medium;
+    line-height: tokens.$line-height-tight;
+  }
+}
+
+.panelBody {
+  padding: tokens.$space-4;
+}

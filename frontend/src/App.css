@@ -1,0 +1,9 @@
+.app {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 2rem;
+  width: 100%;
+}

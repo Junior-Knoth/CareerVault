@@ -1,2 +1,24 @@
-.checkbox {
+@use 'styles/tokens';
+@use 'styles/mixins';
+
+.checkboxWrapper {
+  align-items: center;
+  color: tokens.$color-text-primary;
+  display: flex;
+  gap: tokens.$space-2;
+
+  input {
+    accent-color: tokens.$color-accent;
+    height: 1rem;
+    width: 1rem;
+
+    &:focus-visible {
+      @include mixins.focus-outline;
+    }
+  }
+
+  label {
+    cursor: pointer;
+    line-height: tokens.$line-height-normal;
+  }
 }
