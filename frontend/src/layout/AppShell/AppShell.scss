@@ -24,6 +24,7 @@
   gap: tokens.$space-3;
   min-height: tokens.$layout-header-height;
   padding: tokens.$space-4;
+  text-decoration: none;
 
   div {
     display: grid;
@@ -37,6 +38,10 @@
   span {
     color: tokens.$color-text-muted;
     font-size: tokens.$font-size-small;
+  }
+
+  &:focus-visible {
+    @include mixins.focus-outline;
   }
 }
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import './AppShell.scss';
 import { navigationSections } from '../../constants/navigation';
 import { classNames } from '../../utils/classNames';
@@ -9,10 +10,8 @@ interface AppShellProps {
 
 export default function AppShell({ children }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeItemId, setActiveItemId] = useState('dashboard');
 
-  function handleNavigate(itemId: string) {
-    setActiveItemId(itemId);
+  function handleNavigate() {
     setIsSidebarOpen(false);
   }
 
@@ -26,7 +25,7 @@ export default function AppShell({ children }: AppShellProps) {
       />
 
       <aside className="appSidebar" aria-label="Navegacao principal">
-        <div className="appSidebarBrand">
+        <Link className="appSidebarBrand" to="/" onClick={handleNavigate}>
           <span className="appSidebarMark" aria-hidden="true">
             CV
           </span>
@@ -34,7 +33,7 @@ export default function AppShell({ children }: AppShellProps) {
             <strong>CareerVault</strong>
             <span>Arquivo de carreira</span>
           </div>
-        </div>
+        </Link>
 
         <nav className="appSidebarNav">
           {navigationSections.map((section) => (
@@ -43,17 +42,15 @@ export default function AppShell({ children }: AppShellProps) {
               <ul>
                 {section.items.map((item) => (
                   <li key={item.id}>
-                    <a
-                      className={classNames(
-                        'appSidebarLink',
-                        activeItemId === item.id && 'appSidebarLink--active',
-                      )}
-                      href={item.href}
-                      aria-current={activeItemId === item.id ? 'page' : undefined}
-                      onClick={() => handleNavigate(item.id)}
+                    <NavLink
+                      className={({ isActive }) =>
+                        classNames('appSidebarLink', isActive && 'appSidebarLink--active')
+                      }
+                      to={item.path}
+                      onClick={handleNavigate}
                     >
                       {item.label}
-                    </a>
+                    </NavLink>
                   </li>
                 ))}
               </ul>
@@ -81,7 +78,7 @@ export default function AppShell({ children }: AppShellProps) {
           </div>
         </header>
 
-        <div className="appShellContent">{children}</div>
+        <main className="appShellContent">{children}</main>
       </div>
     </div>
   );

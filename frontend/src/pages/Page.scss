@@ -1,0 +1,33 @@
+@use 'styles/tokens';
+@use 'styles/mixins';
+
+.page {
+  display: grid;
+  gap: tokens.$space-6;
+  margin: 0 auto;
+  max-width: tokens.$content-max-width;
+  padding: tokens.$space-8;
+  width: 100%;
+}
+
+.pageActionLink {
+  align-items: center;
+  background-color: tokens.$color-text-primary;
+  border: tokens.$border-width-default solid tokens.$color-text-primary;
+  color: tokens.$color-surface;
+  display: inline-flex;
+  font-weight: tokens.$font-weight-bold;
+  min-height: 2.5rem;
+  padding: tokens.$space-2 tokens.$space-4;
+  text-decoration: none;
+
+  &:focus-visible {
+    @include mixins.focus-outline;
+  }
+}
+
+@media (max-width: tokens.$breakpoint-small) {
+  .page {
+    padding: tokens.$space-4;
+  }
+}
