@@ -1,0 +1,123 @@
+@use 'styles/tokens';
+
+.playerSaveSelector,
+.playerForm {
+  display: grid;
+  gap: tokens.$space-4;
+}
+
+.playerSaveSelector {
+  align-items: end;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.playerFormGrid {
+  display: grid;
+  gap: tokens.$space-4;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.playerFormActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  justify-content: flex-end;
+}
+
+.playerError {
+  color: tokens.$color-error;
+  font-size: tokens.$font-size-small;
+}
+
+.playerDuplicateNotice {
+  border: tokens.$border-width-default solid tokens.$color-warning;
+  color: tokens.$color-warning;
+  font-size: tokens.$font-size-small;
+  padding: tokens.$space-3;
+}
+
+.playerList {
+  display: grid;
+  gap: tokens.$space-3;
+}
+
+.playerItem {
+  align-items: center;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  display: grid;
+  gap: tokens.$space-4;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  min-height: 6rem;
+  padding: tokens.$space-4;
+}
+
+.playerAvatar {
+  align-items: center;
+  aspect-ratio: 1;
+  background: tokens.$color-surface;
+  border: tokens.$border-width-default solid tokens.$color-border;
+  color: tokens.$color-text-primary;
+  display: flex;
+  font-size: tokens.$font-size-large;
+  font-weight: tokens.$font-weight-bold;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.playerItemContent {
+  display: grid;
+  gap: tokens.$space-2;
+  min-width: 0;
+
+  p {
+    color: tokens.$color-text-secondary;
+    line-height: tokens.$line-height-normal;
+  }
+}
+
+.playerItemHeader {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+
+  h2 {
+    font-size: tokens.$font-size-medium;
+    line-height: tokens.$line-height-tight;
+  }
+}
+
+.playerMeta {
+  align-items: center;
+  color: tokens.$color-text-secondary;
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-3;
+  line-height: tokens.$line-height-normal;
+
+  span {
+    align-items: center;
+    display: inline-flex;
+    gap: tokens.$space-2;
+  }
+
+  img {
+    border: tokens.$border-width-default solid tokens.$color-border;
+    display: block;
+    height: 1rem;
+    object-fit: cover;
+    width: 1.5rem;
+  }
+}
+
+@media (max-width: tokens.$breakpoint-medium) {
+  .playerSaveSelector,
+  .playerFormGrid,
+  .playerItem {
+    grid-template-columns: 1fr;
+  }
+
+  .playerAvatar {
+    width: 3rem;
+  }
+}
