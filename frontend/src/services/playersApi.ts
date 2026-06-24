@@ -40,6 +40,10 @@ export function createPlayer(payload: PlayerPayload) {
   });
 }
 
+export function getPlayer(playerId: number) {
+  return requestJson<Player>(`/players/${playerId}`);
+}
+
 export function checkPlayerDuplicates(params: {
   saveId: number;
   fullName: string;

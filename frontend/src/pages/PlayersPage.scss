@@ -18,6 +18,13 @@
   justify-content: flex-end;
 }
 
+.playerFilters {
+  display: grid;
+  gap: tokens.$space-3;
+  grid-template-columns: minmax(12rem, 1.6fr) repeat(4, minmax(9rem, 1fr));
+  margin-bottom: tokens.$space-4;
+}
+
 .playerFormGrid {
   display: grid;
   gap: tokens.$space-4;
@@ -46,6 +53,111 @@
 .playerBulkSummary {
   color: tokens.$color-success;
   font-size: tokens.$font-size-small;
+}
+
+.playerBulkForm {
+  display: grid;
+  gap: tokens.$space-4;
+}
+
+.playerSpreadsheetWrap,
+.playerTableWrap {
+  overflow-x: auto;
+}
+
+.playerSpreadsheet,
+.playerTable {
+  border-collapse: collapse;
+  min-width: 58rem;
+  width: 100%;
+
+  th,
+  td {
+    border: tokens.$border-width-default solid tokens.$color-border;
+    padding: tokens.$space-2;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  th {
+    background: tokens.$color-surface;
+    color: tokens.$color-text-secondary;
+    font-size: tokens.$font-size-small;
+    font-weight: tokens.$font-weight-bold;
+    text-transform: uppercase;
+  }
+}
+
+.playerSpreadsheet {
+  input,
+  select {
+    background: tokens.$color-panel;
+    border: 0;
+    color: tokens.$color-text-primary;
+    font: inherit;
+    min-height: 2rem;
+    outline: none;
+    padding: tokens.$space-1;
+    width: 100%;
+
+    &:focus-visible {
+      box-shadow: inset 0 0 0 tokens.$border-width-default tokens.$color-accent;
+    }
+  }
+
+  th:first-child,
+  td:first-child {
+    min-width: 15rem;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    min-width: 11rem;
+  }
+}
+
+.playerTable {
+  td {
+    color: tokens.$color-text-secondary;
+  }
+
+  strong {
+    color: tokens.$color-text-primary;
+  }
+}
+
+.playerNameCell {
+  align-items: center;
+  display: flex;
+  gap: tokens.$space-3;
+
+  div {
+    display: grid;
+    gap: tokens.$space-1;
+  }
+
+  span:not(.playerAvatar) {
+    color: tokens.$color-text-secondary;
+    font-size: tokens.$font-size-small;
+  }
+}
+
+.playerFlagCell {
+  align-items: center;
+  display: inline-flex;
+  gap: tokens.$space-2;
+
+  img {
+    border: tokens.$border-width-default solid tokens.$color-border;
+    display: block;
+    height: 1rem;
+    object-fit: cover;
+    width: 1.5rem;
+  }
+}
+
+.playerCompactList {
+  display: none;
 }
 
 .playerList {
@@ -125,8 +237,18 @@
 @media (max-width: tokens.$breakpoint-medium) {
   .playerSaveSelector,
   .playerFormGrid,
+  .playerFilters,
   .playerItem {
     grid-template-columns: 1fr;
+  }
+
+  .playerTable {
+    display: none;
+  }
+
+  .playerCompactList {
+    display: grid;
+    gap: tokens.$space-3;
   }
 
   .playerAvatar {

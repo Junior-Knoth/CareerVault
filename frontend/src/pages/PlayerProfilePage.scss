@@ -1,0 +1,59 @@
+@use 'styles/tokens';
+
+.playerProfileActions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.playerProfileGrid {
+  display: grid;
+  gap: tokens.$space-4;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  div {
+    border: tokens.$border-width-default solid tokens.$color-border;
+    display: grid;
+    gap: tokens.$space-2;
+    padding: tokens.$space-4;
+  }
+
+  span {
+    color: tokens.$color-text-secondary;
+    font-size: tokens.$font-size-small;
+  }
+
+  strong {
+    align-items: center;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: tokens.$space-2;
+    line-height: tokens.$line-height-normal;
+  }
+}
+
+.playerProfileCountry {
+  img {
+    border: tokens.$border-width-default solid tokens.$color-border;
+    display: block;
+    height: 1rem;
+    object-fit: cover;
+    width: 1.5rem;
+  }
+}
+
+.playerProfileBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+}
+
+.playerProfileNotes {
+  color: tokens.$color-text-secondary;
+  line-height: tokens.$line-height-normal;
+}
+
+@media (max-width: tokens.$breakpoint-medium) {
+  .playerProfileGrid {
+    grid-template-columns: 1fr;
+  }
+}
