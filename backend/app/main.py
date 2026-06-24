@@ -2,12 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import check_database_connection
-from app.routers import saves, teams
+from app.routers import players, saves, teams
 
 app = FastAPI(
   title="CareerVault API",
   description="Backend API for the CareerVault application.",
-  version="0.2.2",
+  version="0.3.0",
 )
 
 development_origins = [
@@ -25,12 +25,13 @@ app.add_middleware(
 
 app.include_router(saves.router)
 app.include_router(teams.router)
+app.include_router(players.router)
 
 @app.get("/", tags=["Root"])
 def read_root() -> dict[str, str]:
     return {
         "message": "CareerVault API is running",
-        "version": "0.2.2",
+        "version": "0.3.0",
     }
 
 
@@ -41,6 +42,6 @@ def health_check() -> dict[str, str]:
     return {
         "status": "ok",
         "service": "career-vault-api",
-        "version": "0.2.2",
+        "version": "0.3.0",
         "database": database_status,
     }
