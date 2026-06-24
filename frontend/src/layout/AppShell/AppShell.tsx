@@ -12,15 +12,8 @@ interface AppShellProps {
 
 export default function AppShell({ children }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const {
-    saves,
-    teams,
-    activeSaveId,
-    activeTeamId,
-    isLoading,
-    setActiveSaveId,
-    setActiveTeamId,
-  } = useActiveCareer();
+  const { saves, teams, activeSaveId, activeTeamId, isLoading, setActiveSaveId, setActiveTeamId } =
+    useActiveCareer();
 
   const saveOptions = saves.map((save) => ({ value: String(save.id), label: save.name }));
   const teamOptions = teams.map((team) => ({ value: String(team.id), label: team.name }));

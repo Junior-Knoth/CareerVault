@@ -1,7 +1,10 @@
 import { normalizeText } from './strings';
 
 export function normalizeName(value: string) {
-  return normalizeText(value);
+  return normalizeText(value)
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
 }
 
 export function getDisplayName(fullName: string, shortName?: string | null) {

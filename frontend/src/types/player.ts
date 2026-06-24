@@ -35,3 +35,11 @@ export interface PlayerPayload {
   photo_path?: string | null;
   notes?: string | null;
 }
+
+export interface PlayerDuplicateCheck {
+  save_id: number;
+  full_name: string;
+  normalized_name: string;
+  has_duplicates: boolean;
+  matches: Player[];
+}

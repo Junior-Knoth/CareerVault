@@ -7,7 +7,7 @@ from app.routers import players, saves, teams
 app = FastAPI(
   title="CareerVault API",
   description="Backend API for the CareerVault application.",
-  version="0.3.0",
+  version="0.3.3",
 )
 
 development_origins = [
@@ -31,7 +31,7 @@ app.include_router(players.router)
 def read_root() -> dict[str, str]:
     return {
         "message": "CareerVault API is running",
-        "version": "0.3.0",
+        "version": "0.3.3",
     }
 
 
@@ -42,6 +42,6 @@ def health_check() -> dict[str, str]:
     return {
         "status": "ok",
         "service": "career-vault-api",
-        "version": "0.3.0",
+        "version": "0.3.3",
         "database": database_status,
     }

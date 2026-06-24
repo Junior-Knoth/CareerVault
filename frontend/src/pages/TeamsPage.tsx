@@ -380,9 +380,8 @@ export default function TeamsPage() {
                     </div>
                   )}
                   <p>
-                    {[team.short_name, team.abbreviation]
-                      .filter(Boolean)
-                      .join(' / ') || 'Sem detalhes adicionais.'}
+                    {[team.short_name, team.abbreviation].filter(Boolean).join(' / ') ||
+                      'Sem detalhes adicionais.'}
                   </p>
                 </div>
                 <div className="teamItemActions">

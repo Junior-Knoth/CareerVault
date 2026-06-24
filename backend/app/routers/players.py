@@ -1,6 +1,3 @@
-import re
-import unicodedata
-
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -8,17 +5,10 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.player import Player
 from app.models.save import Save
-from app.schemas.player import PlayerCreate, PlayerRead, PlayerUpdate
+from app.schemas.player import PlayerCreate, PlayerDuplicateCheck, PlayerRead, PlayerUpdate
+from app.utils.names import normalize_name
 
 router = APIRouter(prefix="/players", tags=["Players"])
-
-
-def normalize_name(value: str) -> str:
-    normalized = unicodedata.normalize("NFKD", value)
-    ascii_value = normalized.encode("ascii", "ignore").decode("ascii")
-    compact = re.sub(r"[^a-zA-Z0-9]+", " ", ascii_value).strip().lower()
-
-    return re.sub(r"\s+", " ", compact)
 
 
 def ensure_save_exists(db: Session, save_id: int) -> None:
@@ -60,6 +50,35 @@ def list_players(
     statement = statement.order_by(Player.full_name.asc())
 
     return list(db.scalars(statement))
+
+
+@router.get("/duplicates", response_model=PlayerDuplicateCheck)
+def check_player_duplicates(
+    save_id: int = Query(),
+    full_name: str = Query(min_length=1),
+    exclude_player_id: int | None = Query(default=None),
+    db: Session = Depends(get_db),
+) -> PlayerDuplicateCheck:
+    ensure_save_exists(db, save_id)
+    normalized_name = normalize_name(full_name)
+    statement = select(Player).where(
+        Player.save_id == save_id,
+        Player.normalized_name == normalized_name,
+    )
+
+    if exclude_player_id is not None:
+        statement = statement.where(Player.id != exclude_player_id)
+
+    statement = statement.order_by(Player.full_name.asc())
+    matches = list(db.scalars(statement))
+
+    return PlayerDuplicateCheck(
+        save_id=save_id,
+        full_name=full_name,
+        normalized_name=normalized_name,
+        has_duplicates=len(matches) > 0,
+        matches=matches,
+    )
 
 
 @router.post("/", response_model=PlayerRead, status_code=status.HTTP_201_CREATED)

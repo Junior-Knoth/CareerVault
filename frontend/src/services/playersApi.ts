@@ -1,6 +1,6 @@
 import { requestJson } from './api';
 import type { PlayerStatus } from '../constants/player-status';
-import type { Player, PlayerPayload } from '../types/player';
+import type { Player, PlayerDuplicateCheck, PlayerPayload } from '../types/player';
 
 interface ListPlayersParams {
   saveId?: number;
@@ -38,6 +38,23 @@ export function createPlayer(payload: PlayerPayload) {
     method: 'POST',
     body: JSON.stringify(payload),
   });
+}
+
+export function checkPlayerDuplicates(params: {
+  saveId: number;
+  fullName: string;
+  excludePlayerId?: number;
+}) {
+  const searchParams = new URLSearchParams({
+    save_id: String(params.saveId),
+    full_name: params.fullName,
+  });
+
+  if (params.excludePlayerId) {
+    searchParams.set('exclude_player_id', String(params.excludePlayerId));
+  }
+
+  return requestJson<PlayerDuplicateCheck>(`/players/duplicates?${searchParams.toString()}`);
 }
 
 export function updatePlayer(playerId: number, payload: Partial<PlayerPayload>) {

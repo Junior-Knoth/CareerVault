@@ -47,3 +47,11 @@ class PlayerRead(PlayerBase):
     normalized_name: str
     created_at: datetime
     updated_at: datetime
+
+
+class PlayerDuplicateCheck(BaseModel):
+    save_id: int
+    full_name: str
+    normalized_name: str
+    has_duplicates: bool
+    matches: list[PlayerRead]
