@@ -1,3 +1,5 @@
+import type { PlayerStatus } from '../constants/player-status';
+
 export type PreferredFoot = 'right' | 'left' | 'both';
 
 export interface Player {
@@ -12,7 +14,7 @@ export interface Player {
   weight_kg: number | null;
   preferred_foot: PreferredFoot | null;
   academy_origin: boolean;
-  status: string;
+  status: PlayerStatus;
   photo_path: string | null;
   notes: string | null;
   created_at: string;
@@ -29,7 +31,7 @@ export interface PlayerPayload {
   weight_kg?: number | null;
   preferred_foot?: PreferredFoot | null;
   academy_origin?: boolean;
-  status?: string;
+  status?: PlayerStatus;
   photo_path?: string | null;
   notes?: string | null;
 }

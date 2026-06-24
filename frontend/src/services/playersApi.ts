@@ -1,9 +1,10 @@
 import { requestJson } from './api';
+import type { PlayerStatus } from '../constants/player-status';
 import type { Player, PlayerPayload } from '../types/player';
 
 interface ListPlayersParams {
   saveId?: number;
-  status?: string;
+  status?: PlayerStatus;
   nationality?: string;
   search?: string;
 }
