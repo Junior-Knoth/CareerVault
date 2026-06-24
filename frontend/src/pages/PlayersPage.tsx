@@ -109,6 +109,12 @@ export default function PlayersPage() {
   const [error, setError] = useState<string | null>(null);
   const [duplicateCheck, setDuplicateCheck] = useState<PlayerDuplicateCheck | null>(null);
   const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] = useState(false);
+  const [isQuickFormOpen, setIsQuickFormOpen] = useState(false);
+  const [isBulkFormOpen, setIsBulkFormOpen] = useState(false);
+  const [bulkNames, setBulkNames] = useState('');
+  const [isBulkSubmitting, setIsBulkSubmitting] = useState(false);
+  const [bulkError, setBulkError] = useState<string | null>(null);
+  const [bulkSummary, setBulkSummary] = useState<string | null>(null);
 
   const saveOptions = saves.map((save) => ({ value: String(save.id), label: save.name }));
   const selectedSaveId = activeSaveId;
@@ -123,6 +129,8 @@ export default function PlayersPage() {
       setForm((currentForm) => ({ ...currentForm, save_id: activeSaveId }));
       setDuplicateCheck(null);
       setIsDuplicateDialogOpen(false);
+      setBulkError(null);
+      setBulkSummary(null);
 
       if (!activeSaveId) {
         setPlayers([]);
@@ -154,6 +162,18 @@ export default function PlayersPage() {
     setForm({ ...emptyForm, save_id: activeSaveId });
     setDuplicateCheck(null);
     setIsDuplicateDialogOpen(false);
+  }
+
+  function closeQuickForm() {
+    resetForm();
+    setIsQuickFormOpen(false);
+  }
+
+  function closeBulkForm() {
+    setBulkNames('');
+    setBulkError(null);
+    setBulkSummary(null);
+    setIsBulkFormOpen(false);
   }
 
   async function handleSelectSave(saveId: string) {
@@ -197,6 +217,7 @@ export default function PlayersPage() {
       );
       addToast({ variant: 'success', title: 'Jogador criado', message: createdPlayer.full_name });
       resetForm();
+      setIsQuickFormOpen(false);
     } catch {
       setError('Nao foi possivel salvar o jogador. Confira os campos e tente novamente.');
     } finally {
@@ -207,6 +228,85 @@ export default function PlayersPage() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     void submitPlayer();
+  }
+
+  async function handleBulkSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!selectedSaveId) {
+      setBulkError('Selecione um save antes de cadastrar jogadores.');
+      return;
+    }
+
+    const names = bulkNames
+      .split(/\r?\n/)
+      .map((name) => name.trim())
+      .filter(Boolean);
+
+    if (names.length === 0) {
+      setBulkError('Informe ao menos um jogador.');
+      return;
+    }
+
+    const uniqueNames = Array.from(new Set(names));
+    setIsBulkSubmitting(true);
+    setBulkError(null);
+    setBulkSummary(null);
+
+    try {
+      const createdPlayers: Player[] = [];
+      const duplicatedNames: string[] = [];
+
+      for (const fullName of uniqueNames) {
+        const duplicateResult = await checkPlayerDuplicates({
+          saveId: Number(selectedSaveId),
+          fullName,
+        });
+
+        if (duplicateResult.has_duplicates) {
+          duplicatedNames.push(fullName);
+          continue;
+        }
+
+        createdPlayers.push(
+          await createPlayer({
+            save_id: Number(selectedSaveId),
+            full_name: fullName,
+            status: 'active',
+          }),
+        );
+      }
+
+      if (createdPlayers.length > 0) {
+        setPlayers((currentPlayers) =>
+          [...currentPlayers, ...createdPlayers].sort((firstPlayer, secondPlayer) =>
+            firstPlayer.full_name.localeCompare(secondPlayer.full_name),
+          ),
+        );
+      }
+
+      setBulkSummary(
+        `${createdPlayers.length} ${createdPlayers.length === 1 ? 'jogador criado' : 'jogadores criados'}${
+          duplicatedNames.length > 0
+            ? `; ${duplicatedNames.length} ${duplicatedNames.length === 1 ? 'duplicado ignorado' : 'duplicados ignorados'}`
+            : ''
+        }.`,
+      );
+
+      addToast({
+        variant: createdPlayers.length > 0 ? 'success' : 'warning',
+        title: 'Cadastro em massa concluido',
+        message: `${createdPlayers.length} criados, ${duplicatedNames.length} ignorados.`,
+      });
+
+      if (createdPlayers.length > 0) {
+        setBulkNames('');
+      }
+    } catch {
+      setBulkError('Nao foi possivel concluir o cadastro em massa.');
+    } finally {
+      setIsBulkSubmitting(false);
+    }
   }
 
   return (
@@ -232,151 +332,195 @@ export default function PlayersPage() {
         </div>
       </Panel>
 
-      <Panel title="Novo jogador">
-        <form className="playerForm" onSubmit={handleSubmit}>
-          <FormField label="Nome completo" htmlFor="player-full-name" required>
-            <Input
-              id="player-full-name"
-              value={form.full_name}
-              onChange={(value) => updateForm('full_name', value)}
-              placeholder="Ex: Joao da Silva"
-              disabled={isSubmitting || !selectedSaveId}
-            />
-          </FormField>
+      <div className="playerToolbar">
+        <Button onClick={() => setIsQuickFormOpen((isOpen) => !isOpen)} disabled={!selectedSaveId}>
+          {isQuickFormOpen ? 'Fechar formulario' : 'Novo jogador'}
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() => setIsBulkFormOpen((isOpen) => !isOpen)}
+          disabled={!selectedSaveId}
+        >
+          {isBulkFormOpen ? 'Fechar massa' : 'Cadastro em massa'}
+        </Button>
+      </div>
 
-          <div className="playerFormGrid">
-            <FormField label="Nome curto" htmlFor="player-short-name">
+      {isQuickFormOpen && (
+        <Panel title="Novo jogador">
+          <form className="playerForm" onSubmit={handleSubmit}>
+            <FormField label="Nome completo" htmlFor="player-full-name" required>
               <Input
-                id="player-short-name"
-                value={form.short_name}
-                onChange={(value) => updateForm('short_name', value)}
-                placeholder="Ex: Joao Silva"
+                id="player-full-name"
+                value={form.full_name}
+                onChange={(value) => updateForm('full_name', value)}
+                placeholder="Ex: Joao da Silva"
                 disabled={isSubmitting || !selectedSaveId}
               />
             </FormField>
 
-            <FormField label="Nascimento" htmlFor="player-birth-date">
-              <Input
-                id="player-birth-date"
-                type="date"
-                value={form.birth_date}
-                onChange={(value) => updateForm('birth_date', value)}
-                disabled={isSubmitting || !selectedSaveId}
-              />
-            </FormField>
-          </div>
+            <div className="playerFormGrid">
+              <FormField label="Nome curto" htmlFor="player-short-name">
+                <Input
+                  id="player-short-name"
+                  value={form.short_name}
+                  onChange={(value) => updateForm('short_name', value)}
+                  placeholder="Ex: Joao Silva"
+                  disabled={isSubmitting || !selectedSaveId}
+                />
+              </FormField>
 
-          <div className="playerFormGrid">
-            <FormField label="Nacionalidade" htmlFor="player-nationality">
-              <Select
-                id="player-nationality"
-                value={form.nationality}
-                onChange={(value) => updateForm('nationality', value)}
-                options={countrySelectOptions}
-                placeholder="Selecione um pais"
-                disabled={isSubmitting || !selectedSaveId}
-              />
-            </FormField>
-
-            <FormField label="Status" htmlFor="player-status">
-              <Select
-                id="player-status"
-                value={form.status}
-                onChange={(value) => updateForm('status', value)}
-                options={[...playerStatusOptions]}
-                placeholder="Selecione"
-                disabled={isSubmitting || !selectedSaveId}
-              />
-            </FormField>
-          </div>
-
-          <div className="playerFormGrid">
-            <FormField label="Altura (cm)" htmlFor="player-height">
-              <NumberInput
-                id="player-height"
-                value={form.height_cm}
-                onChange={(value) => updateForm('height_cm', value)}
-                min={100}
-                max={230}
-                placeholder="Ex: 180"
-                disabled={isSubmitting || !selectedSaveId}
-              />
-            </FormField>
-
-            <FormField label="Peso (kg)" htmlFor="player-weight">
-              <NumberInput
-                id="player-weight"
-                value={form.weight_kg}
-                onChange={(value) => updateForm('weight_kg', value)}
-                min={30}
-                max={180}
-                placeholder="Ex: 75"
-                disabled={isSubmitting || !selectedSaveId}
-              />
-            </FormField>
-          </div>
-
-          <div className="playerFormGrid">
-            <FormField label="Pe preferido" htmlFor="player-preferred-foot">
-              <Select
-                id="player-preferred-foot"
-                value={form.preferred_foot}
-                onChange={(value) => updateForm('preferred_foot', value)}
-                options={preferredFootOptions}
-                placeholder="Selecione"
-                disabled={isSubmitting || !selectedSaveId}
-              />
-            </FormField>
-
-            <FormField label="Foto" htmlFor="player-photo-path">
-              <Input
-                id="player-photo-path"
-                value={form.photo_path}
-                onChange={(value) => updateForm('photo_path', value)}
-                placeholder="Caminho local futuro"
-                disabled={isSubmitting || !selectedSaveId}
-              />
-            </FormField>
-          </div>
-
-          <Checkbox
-            id="player-academy-origin"
-            label="Formado na academia"
-            checked={form.academy_origin}
-            onChange={(value) => updateForm('academy_origin', value)}
-            disabled={isSubmitting || !selectedSaveId}
-          />
-
-          <FormField label="Notas" htmlFor="player-notes">
-            <Textarea
-              id="player-notes"
-              value={form.notes}
-              onChange={(value) => updateForm('notes', value)}
-              placeholder="Observacoes curtas sobre o jogador"
-              rows={3}
-              disabled={isSubmitting || !selectedSaveId}
-            />
-          </FormField>
-
-          {duplicateCheck && (
-            <div className="playerDuplicateNotice" role="alert">
-              Possivel duplicidade com {duplicateCheck.matches.length}{' '}
-              {duplicateCheck.matches.length === 1 ? 'jogador' : 'jogadores'} neste save.
+              <FormField label="Nascimento" htmlFor="player-birth-date">
+                <Input
+                  id="player-birth-date"
+                  type="date"
+                  value={form.birth_date}
+                  onChange={(value) => updateForm('birth_date', value)}
+                  disabled={isSubmitting || !selectedSaveId}
+                />
+              </FormField>
             </div>
-          )}
 
-          {error && <p className="playerError">{error}</p>}
+            <div className="playerFormGrid">
+              <FormField label="Nacionalidade" htmlFor="player-nationality">
+                <Select
+                  id="player-nationality"
+                  value={form.nationality}
+                  onChange={(value) => updateForm('nationality', value)}
+                  options={countrySelectOptions}
+                  placeholder="Selecione um pais"
+                  disabled={isSubmitting || !selectedSaveId}
+                />
+              </FormField>
 
-          <div className="playerFormActions">
-            <Button variant="secondary" onClick={resetForm} disabled={isSubmitting}>
-              Limpar
-            </Button>
-            <Button type="submit" disabled={isSubmitting || !selectedSaveId}>
-              {isSubmitting ? 'Salvando...' : 'Criar jogador'}
-            </Button>
-          </div>
-        </form>
-      </Panel>
+              <FormField label="Status" htmlFor="player-status">
+                <Select
+                  id="player-status"
+                  value={form.status}
+                  onChange={(value) => updateForm('status', value)}
+                  options={[...playerStatusOptions]}
+                  placeholder="Selecione"
+                  disabled={isSubmitting || !selectedSaveId}
+                />
+              </FormField>
+            </div>
+
+            <div className="playerFormGrid">
+              <FormField label="Altura (cm)" htmlFor="player-height">
+                <NumberInput
+                  id="player-height"
+                  value={form.height_cm}
+                  onChange={(value) => updateForm('height_cm', value)}
+                  min={100}
+                  max={230}
+                  placeholder="Ex: 180"
+                  disabled={isSubmitting || !selectedSaveId}
+                />
+              </FormField>
+
+              <FormField label="Peso (kg)" htmlFor="player-weight">
+                <NumberInput
+                  id="player-weight"
+                  value={form.weight_kg}
+                  onChange={(value) => updateForm('weight_kg', value)}
+                  min={30}
+                  max={180}
+                  placeholder="Ex: 75"
+                  disabled={isSubmitting || !selectedSaveId}
+                />
+              </FormField>
+            </div>
+
+            <div className="playerFormGrid">
+              <FormField label="Pe preferido" htmlFor="player-preferred-foot">
+                <Select
+                  id="player-preferred-foot"
+                  value={form.preferred_foot}
+                  onChange={(value) => updateForm('preferred_foot', value)}
+                  options={preferredFootOptions}
+                  placeholder="Selecione"
+                  disabled={isSubmitting || !selectedSaveId}
+                />
+              </FormField>
+
+              <FormField label="Foto" htmlFor="player-photo-path">
+                <Input
+                  id="player-photo-path"
+                  value={form.photo_path}
+                  onChange={(value) => updateForm('photo_path', value)}
+                  placeholder="Caminho local futuro"
+                  disabled={isSubmitting || !selectedSaveId}
+                />
+              </FormField>
+            </div>
+
+            <Checkbox
+              id="player-academy-origin"
+              label="Formado na academia"
+              checked={form.academy_origin}
+              onChange={(value) => updateForm('academy_origin', value)}
+              disabled={isSubmitting || !selectedSaveId}
+            />
+
+            <FormField label="Notas" htmlFor="player-notes">
+              <Textarea
+                id="player-notes"
+                value={form.notes}
+                onChange={(value) => updateForm('notes', value)}
+                placeholder="Observacoes curtas sobre o jogador"
+                rows={3}
+                disabled={isSubmitting || !selectedSaveId}
+              />
+            </FormField>
+
+            {duplicateCheck && (
+              <div className="playerDuplicateNotice" role="alert">
+                Possivel duplicidade com {duplicateCheck.matches.length}{' '}
+                {duplicateCheck.matches.length === 1 ? 'jogador' : 'jogadores'} neste save.
+              </div>
+            )}
+
+            {error && <p className="playerError">{error}</p>}
+
+            <div className="playerFormActions">
+              <Button variant="secondary" onClick={closeQuickForm} disabled={isSubmitting}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isSubmitting || !selectedSaveId}>
+                {isSubmitting ? 'Salvando...' : 'Criar jogador'}
+              </Button>
+            </div>
+          </form>
+        </Panel>
+      )}
+
+      {isBulkFormOpen && (
+        <Panel title="Cadastro em massa">
+          <form className="playerForm" onSubmit={handleBulkSubmit}>
+            <FormField label="Jogadores" htmlFor="player-bulk-names" required>
+              <Textarea
+                id="player-bulk-names"
+                value={bulkNames}
+                onChange={setBulkNames}
+                placeholder="Um jogador por linha"
+                rows={8}
+                disabled={isBulkSubmitting || !selectedSaveId}
+              />
+            </FormField>
+
+            {bulkError && <p className="playerError">{bulkError}</p>}
+            {bulkSummary && <p className="playerBulkSummary">{bulkSummary}</p>}
+
+            <div className="playerFormActions">
+              <Button variant="secondary" onClick={closeBulkForm} disabled={isBulkSubmitting}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isBulkSubmitting || !selectedSaveId}>
+                {isBulkSubmitting ? 'Cadastrando...' : 'Cadastrar jogadores'}
+              </Button>
+            </div>
+          </form>
+        </Panel>
+      )}
 
       <Panel title="Jogadores cadastrados">
         {isLoading && <LoadingState message="Carregando jogadores..." />}

@@ -11,6 +11,13 @@
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+.playerToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  justify-content: flex-end;
+}
+
 .playerFormGrid {
   display: grid;
   gap: tokens.$space-4;
@@ -34,6 +41,11 @@
   color: tokens.$color-warning;
   font-size: tokens.$font-size-small;
   padding: tokens.$space-3;
+}
+
+.playerBulkSummary {
+  color: tokens.$color-success;
+  font-size: tokens.$font-size-small;
 }
 
 .playerList {
